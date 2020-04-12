@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup as bs4
 
 # 各商品ページから、商品情報を取得する
 soup = bs4(open('./files/1.html'), 'html.parser')
-img = downloadProductImg(soup)
+# img = downloadProductImg(soup)
+info = getProdcutInfo(soup)
 
-print(img)
+print(info)

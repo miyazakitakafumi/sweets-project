@@ -75,11 +75,19 @@ def getProductDetail(soup):
 
 # 商品の画像をダウンロードする
 def downloadProductImg(soup):
-    src = soup.find(class_='image').find('img')['src']
+    src = getImgLink(soup)
     r = requests.get('https:' + src)
-    with open('./files/seven/img/' + src.split('=')[1] + '.jpg', mode='wb') as fw:
+    with open('./files/seven/img/' + getProductImgId(src) + '.jpg', mode='wb') as fw:
         fw.write(r.content)
     return src
+
+# 商品の画像のリンクを取得する
+def getImgLink(soup):
+    return soup.find(class_='image').find('img')['src']
+
+# 商品の画像リンクから商品IDを取得する
+def getProductImgId(img_link):
+    return img_link.split('=')[1]
 
 # 商品情報を返す
 def getProdcutInfo(soup):
@@ -88,5 +96,6 @@ def getProdcutInfo(soup):
     region = getProductRegion(soup)
     region_note = getProductRegionNote(soup)
     detail = getProductDetail(soup)
+    img_id = getProductImgId(getImgLink(soup))
 
-    return title + ',' + price + ',' + region + ',' + region_note + ',' + detail
+    return title + ',' + price + ',' + region + ',' + region_note + ',' + detail + ',' + img_id
