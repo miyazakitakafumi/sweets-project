@@ -16,7 +16,7 @@ def saveAllListPage(target_urls):
     for index, url in enumerate(target_urls):
         r = requests.get(url)
         soup = bs4(r.content, "html.parser")
-        saveHtml(soup, './files/seven-main/', 'seven-sweets-' + str(index) + '.html')
+        saveHtml(soup, 'files/seven/', 'seven-sweets-' + str(index) + '.html')
 
 # ベースの一覧ページ(１ページ目)から、すべての一覧ページのリンクを返す
 def getAllListLinks():
@@ -39,3 +39,54 @@ def getProductTitle(soup):
         return ''
 
     return el.getText()
+
+# 商品価格の取得
+def getProductPrice(soup):
+    el = soup.find(class_='price')
+    if el == None:
+        return ''
+
+    return el.getText()
+
+# 商品の販売地域の取得
+def getProductRegion(soup):
+    el = soup.find(class_='region')
+    if el == None:
+        return ''
+
+    el.find('em').decompose()
+    return el.getText()
+
+# 商品の販売地域noteの取得
+def getProductRegionNote(soup):
+    el = soup.find(class_='regionYnote')
+    if el == None:
+        return ''
+
+    return el.getText()
+
+# 商品の詳細の取得
+def getProductDetail(soup):
+    el = soup.find(class_='text')
+    if el == None:
+        return ''
+
+    return el.getText()
+
+# 商品の画像をダウンロードする
+def downloadProductImg(soup):
+    src = soup.find(class_='image').find('img')['src']
+    r = requests.get('https:' + src)
+    with open('./files/seven/img/' + src.split('=')[1] + '.jpg', mode='wb') as fw:
+        fw.write(r.content)
+    return src
+
+# 商品情報を返す
+def getProdcutInfo(soup):
+    title = getProductTitle(soup)
+    price = getProductPrice(soup)
+    region = getProductRegion(soup)
+    region_note = getProductRegionNote(soup)
+    detail = getProductDetail(soup)
+
+    return title + ',' + price + ',' + region + ',' + region_note + ',' + detail

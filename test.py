@@ -1,4 +1,14 @@
-from seven import getAllListLinks
+from seven import getProdcutInfo, downloadProductImg
+from bs4 import BeautifulSoup as bs4
 
+# print(getAllListLinks())
 
-print(getAllListLinks())
+# すべての商品一覧ページのURLを取得する
+
+# 各一覧ページから商品のリンクを取得する
+
+# 各商品ページから、商品情報を取得する
+soup = bs4(open('./files/1.html'), 'html.parser')
+img = downloadProductImg(soup)
+
+print(img)
