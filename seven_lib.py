@@ -73,6 +73,10 @@ def getProductDetail(soup):
 
     return el.getText()
 
+# 商品の画像のリンクを取得する
+def getImgLink(soup):
+    return soup.find(class_='image').find('img')['src']
+
 # 商品の画像をダウンロードする
 def downloadProductImg(soup):
     src = getImgLink(soup)
@@ -80,10 +84,6 @@ def downloadProductImg(soup):
     with open('./files/seven/img/' + getProductImgId(src) + '.jpg', mode='wb') as fw:
         fw.write(r.content)
     return src
-
-# 商品の画像のリンクを取得する
-def getImgLink(soup):
-    return soup.find(class_='image').find('img')['src']
 
 # 商品の画像リンクから商品IDを取得する
 def getProductImgId(img_link):
